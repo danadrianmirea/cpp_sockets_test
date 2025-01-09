@@ -1,0 +1,5 @@
+D:/adi/src/CppSocketsTest/build/CMakeFiles/ALL_BUILD.dir
+D:/adi/src/CppSocketsTest/build/CMakeFiles/ZERO_CHECK.dir
+D:/adi/src/CppSocketsTest/build/code/CMakeFiles/server.dir
+D:/adi/src/CppSocketsTest/build/code/CMakeFiles/client.dir
+D:/adi/src/CppSocketsTest/build/code/CMakeFiles/ALL_BUILD.dir
