@@ -18,7 +18,6 @@
 void handle_client(SOCKET client_socket) 
 {
   char temp[1024];
-  //std::string buffer;
 
   while (true) 
   {
@@ -34,11 +33,8 @@ void handle_client(SOCKET client_socket)
       return;
     }
 
-    // Add received data to the buffer
-    temp[bytes_received] = '\0';  // Null-terminate the received data
-    //buffer += temp;  // Append the received data to the buffer
+    temp[bytes_received] = '\0'; 
     std::cout << "Client " << client_socket << " says: " << temp << std::endl;
-    //buffer= "";
   }
 }
 
