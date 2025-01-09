@@ -18,7 +18,7 @@
 void handle_client(SOCKET client_socket) 
 {
   char temp[1024];
-  std::string buffer;
+  //std::string buffer;
 
   while (true) 
   {
@@ -36,16 +36,9 @@ void handle_client(SOCKET client_socket)
 
     // Add received data to the buffer
     temp[bytes_received] = '\0';  // Null-terminate the received data
-    buffer += temp;  // Append the received data to the buffer
-
-    // Check for complete messages (delimited by '\n')
-    size_t pos;
-    while ((pos = buffer.find('\n')) != std::string::npos) 
-    {
-      std::string message = buffer.substr(0, pos); // Extract the message up to the '\n'
-      buffer.erase(0, pos + 1);                    // Remove the processed part of the buffer
-      std::cout << "Client " << client_socket << " says: " << message << std::endl;
-    }
+    //buffer += temp;  // Append the received data to the buffer
+    std::cout << "Client " << client_socket << " says: " << temp << std::endl;
+    //buffer= "";
   }
 }
 

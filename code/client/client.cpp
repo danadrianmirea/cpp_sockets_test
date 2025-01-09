@@ -54,7 +54,7 @@ int main()
   {
     std::string message;
     std::getline(std::cin, message);
-    std::cout << message << "\n";
+    //std::cout << message << "\n";
     result = send(client_socket, message.c_str(),
                   static_cast<int>(message.size()), 0);
     if (result == SOCKET_ERROR) 
