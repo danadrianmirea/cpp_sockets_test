@@ -33,7 +33,7 @@ void handle_client(SOCKET client_socket)
       return;
     }
 
-    temp[bytes_received] = '\0'; 
+    temp[bytes_received] = '\0';
     std::cout << "Client " << client_socket << " says: " << temp << std::endl;
   }
 }
