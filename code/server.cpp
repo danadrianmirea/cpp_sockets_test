@@ -15,13 +15,16 @@
 #endif
 
 // Function to handle a single client
-void handle_client(SOCKET client_socket) {
+void handle_client(SOCKET client_socket) 
+{
   std::string buffer;
   char temp[1024];
 
-  while (true) {
+  while (true) 
+  {
     int bytes_received = recv(client_socket, temp, sizeof(temp) - 1, 0);
-    if (bytes_received <= 0) {
+    if (bytes_received <= 0) 
+    {
       std::cout << "Client " << client_socket << " disconnected\n";
 #ifdef _WIN32
       closesocket(client_socket);
@@ -37,7 +40,8 @@ void handle_client(SOCKET client_socket) {
 
     // Check for a delimiter (`\n`)
     size_t pos;
-    while ((pos = buffer.find('\n')) != std::string::npos) {
+    while ((pos = buffer.find('\n')) != std::string::npos) 
+    {
       std::string message = buffer.substr(0, pos); // Extract the message
       buffer.erase(0, pos + 1);                    // Remove processed part
       std::cout << "Client " << client_socket << " says: " << message
@@ -46,7 +50,8 @@ void handle_client(SOCKET client_socket) {
   }
 }
 
-int main() {
+int main() 
+{
   const int PORT = 8080;
 
 #ifdef _WIN32
@@ -55,7 +60,8 @@ int main() {
 #endif
 
   SOCKET server_socket = socket(AF_INET, SOCK_STREAM, 0);
-  if (server_socket == INVALID_SOCKET) {
+  if (server_socket == INVALID_SOCKET) 
+  {
     std::cerr << "Socket creation failed\n";
 #ifdef _WIN32
     WSACleanup();
@@ -69,7 +75,8 @@ int main() {
   server_addr.sin_port = htons(PORT);
 
   if (bind(server_socket, (sockaddr *)&server_addr, sizeof(server_addr)) ==
-      SOCKET_ERROR) {
+      SOCKET_ERROR) 
+      {
     std::cerr << "Bind failed\n";
 #ifdef _WIN32
     closesocket(server_socket);
@@ -94,7 +101,8 @@ int main() {
   std::cout << "Server is listening on port " << PORT << "\n";
 
   std::vector<std::thread> client_threads;
-  while (true) {
+  while (true) 
+  {
     sockaddr_in client_addr;
     socklen_t client_len = sizeof(client_addr);
 
@@ -109,8 +117,10 @@ int main() {
     client_threads.emplace_back(handle_client, client_socket);
   }
 
-  for (auto &t : client_threads) {
-    if (t.joinable()) {
+  for (auto &t : client_threads) 
+  {
+    if (t.joinable()) 
+    {
       t.join();
     }
   }

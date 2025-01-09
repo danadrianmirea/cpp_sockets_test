@@ -49,10 +49,12 @@ int main()
   std::cout << "Connected to the server.\n";
 
   // Step 5: Main loop
-  std::string message;
+  
   while (true) 
   {
+    std::string message;
     std::getline(std::cin, message);
+    std::cout << message << "\n";
     result = send(client_socket, message.c_str(),
                   static_cast<int>(message.size()), 0);
     if (result == SOCKET_ERROR) 
