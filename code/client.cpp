@@ -6,7 +6,8 @@
 // Link with Ws2_32.lib
 #pragma comment(lib, "Ws2_32.lib")
 
-int main() {
+int main() 
+{
   const char *server_ip = "127.0.0.1";
   const int PORT = 8080;
 
