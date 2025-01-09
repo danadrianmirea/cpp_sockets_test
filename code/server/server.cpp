@@ -1,5 +1,6 @@
 #include <cstring>
 #include <iostream>
+#include <sstream>
 #include <thread>
 #include <vector>
 #include <mutex>
@@ -23,9 +24,9 @@ void broadcast_message(const std::string& message, SOCKET sender_socket) {
   std::lock_guard<std::mutex> lock(client_list_mutex);
   
   for (SOCKET client_socket : client_list) {
-    if (client_socket != sender_socket) {
+    //if (client_socket != sender_socket) {
       send(client_socket, message.c_str(), message.size(), 0);
-    }
+    //}
   }
 }
 
@@ -41,8 +42,13 @@ void handle_client(SOCKET client_socket) {
 
   while (true) {
     int bytes_received = recv(client_socket, temp, sizeof(temp) - 1, 0);
-    if (bytes_received <= 0) {
-      std::cout << "Client " << client_socket << " disconnected\n";
+    if (bytes_received <= 0) 
+    {
+      std::cout << client_socket << " disconnected\n";
+      std::ostringstream os;
+      os << "[Server]: " << client_socket << " disconnected\n";
+      broadcast_message(os.str(), 0);
+
       {
         // Remove the client from the client list
         std::lock_guard<std::mutex> lock(client_list_mutex);
@@ -63,8 +69,11 @@ void handle_client(SOCKET client_socket) {
     temp[bytes_received] = '\0';
     std::cout << "Client " << client_socket << " says: " << temp << std::endl;
 
-    // Broadcast the received message to all other clients
-    broadcast_message(temp, client_socket);
+    // add client: prefix
+    
+    std::ostringstream os;
+    os << "[" << client_socket << "]: " << ": " << temp;
+    broadcast_message(os.str(), client_socket);
   }
 }
 
@@ -125,7 +134,11 @@ int main() {
       continue;
     }
 
-    std::cout << "New client connected: " << client_socket << "\n";
+    std::cout << "Client connected: " << client_socket << "\n";
+    std::ostringstream os;
+    os << "[Server]: " << "New client connected: " << client_socket << "\n";
+    broadcast_message(os.str(), 0);
+
     client_threads.emplace_back(handle_client, client_socket);
   }
 
