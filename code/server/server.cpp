@@ -1,9 +1,10 @@
 #include <cstring>
 #include <iostream>
+#include <mutex>
 #include <sstream>
 #include <thread>
 #include <vector>
-#include <mutex>
+
 
 #ifdef _WIN32
 #include <winsock2.h>
@@ -19,13 +20,12 @@
 std::vector<SOCKET> client_list;
 std::mutex client_list_mutex;
 
-// Function to broadcast a message to all clients except the sender
-void broadcast_message(const std::string& message, SOCKET sender_socket) {
+void broadcast_message(const std::string &message, SOCKET sender_socket) {
   std::lock_guard<std::mutex> lock(client_list_mutex);
-  
+
   for (SOCKET client_socket : client_list) {
-    //if (client_socket != sender_socket) {
-      send(client_socket, message.c_str(), message.size(), 0);
+    // if (client_socket != sender_socket) {
+    send(client_socket, message.c_str(), message.size(), 0);
     //}
   }
 }
@@ -42,8 +42,7 @@ void handle_client(SOCKET client_socket) {
 
   while (true) {
     int bytes_received = recv(client_socket, temp, sizeof(temp) - 1, 0);
-    if (bytes_received <= 0) 
-    {
+    if (bytes_received <= 0) {
       std::cout << client_socket << " disconnected\n";
       std::ostringstream os;
       os << "[Server]: " << client_socket << " disconnected\n";
@@ -52,7 +51,8 @@ void handle_client(SOCKET client_socket) {
       {
         // Remove the client from the client list
         std::lock_guard<std::mutex> lock(client_list_mutex);
-        auto it = std::find(client_list.begin(), client_list.end(), client_socket);
+        auto it =
+            std::find(client_list.begin(), client_list.end(), client_socket);
         if (it != client_list.end()) {
           client_list.erase(it);
         }
@@ -70,7 +70,7 @@ void handle_client(SOCKET client_socket) {
     std::cout << "Client " << client_socket << " says: " << temp << std::endl;
 
     // add client: prefix
-    
+
     std::ostringstream os;
     os << "[" << client_socket << "]: " << ": " << temp;
     broadcast_message(os.str(), client_socket);
@@ -99,7 +99,8 @@ int main() {
   server_addr.sin_addr.s_addr = INADDR_ANY;
   server_addr.sin_port = htons(PORT);
 
-  if (bind(server_socket, (sockaddr *)&server_addr, sizeof(server_addr)) == SOCKET_ERROR) {
+  if (bind(server_socket, (sockaddr *)&server_addr, sizeof(server_addr)) ==
+      SOCKET_ERROR) {
     std::cerr << "Bind failed\n";
 #ifdef _WIN32
     closesocket(server_socket);
@@ -128,7 +129,8 @@ int main() {
     sockaddr_in client_addr;
     socklen_t client_len = sizeof(client_addr);
 
-    SOCKET client_socket = accept(server_socket, (sockaddr *)&client_addr, &client_len);
+    SOCKET client_socket =
+        accept(server_socket, (sockaddr *)&client_addr, &client_len);
     if (client_socket == INVALID_SOCKET) {
       std::cerr << "Client connection failed\n";
       continue;
