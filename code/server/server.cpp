@@ -6,7 +6,7 @@
 #include <vector>
 
 
-#ifdef _WIN32
+#ifdef WINDOWS_BUILD
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #pragma comment(lib, "ws2_32.lib")
@@ -14,6 +14,9 @@
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <unistd.h>
+typedef int SOCKET;  // Define SOCKET as int on Linux
+#define INVALID_SOCKET -1
+#define SOCKET_ERROR -1
 #endif
 
 // Global client list and mutex for thread-safe access
@@ -51,8 +54,7 @@ void handle_client(SOCKET client_socket) {
       {
         // Remove the client from the client list
         std::lock_guard<std::mutex> lock(client_list_mutex);
-        auto it =
-            std::find(client_list.begin(), client_list.end(), client_socket);
+        auto it = std::find(client_list.begin(), client_list.end(), client_socket);
         if (it != client_list.end()) {
           client_list.erase(it);
         }
