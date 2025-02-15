@@ -35,7 +35,7 @@ void receive_messages(SOCKET client_socket)
     }
 }
 
-int main() 
+int main()
 {
     const char *server_ip = "127.0.0.1";
     const int PORT = 8080;
@@ -76,7 +76,7 @@ int main()
     std::thread receive_thread(receive_messages, client_socket);
 
     // Main loop to send messages to the server
-    while (running) 
+    while (running)
     {
         std::string message;
         std::getline(std::cin, message);
@@ -87,8 +87,7 @@ int main()
             break;
         }
 
-        result = send(client_socket, message.c_str(),
-                      static_cast<int>(message.size()), 0);
+        result = send(client_socket, message.c_str(), static_cast<int>(message.size()), 0);
         if (result == SOCKET_ERROR) 
         {
             std::cerr << "Send failed with error: " << WSAGetLastError() << "\n";
